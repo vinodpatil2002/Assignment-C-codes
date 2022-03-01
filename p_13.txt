@@ -29,31 +29,25 @@ void read_array(int a[],int b)
 }
 void find_perfect(int a[],int b)
 {
-    int i,j,sum,temp;
-
-
-
-    sum = 0;
-    j=1;
+    int i,j,temp;
     for(i=0;i<b;i++)
     {
-
-
-        temp = a[i];
-        while(j <= (a[i])/2)
+        int sum=0;
+        temp=a[i];
+        for(j=1;j<=(temp-1);j++)
+       {
+        if(temp%j==0)
         {
-
-            if(a[i] % j == 0)
-            {
-                sum = sum + j;
-            }
-            j++;
+            sum=sum+j;
         }
+       }
+      if(sum==temp)
+      {
+          printf("\n %d is perfect\n",temp);
+      }
+      else{
+        printf("\n %d is not perfect \n",temp);
 
-        if(sum == temp)
-            printf("\n %d is a perfect number ",temp);
-        else
-            printf("\n %d is not a perfect number ",temp);
-
+      }
     }
 }
