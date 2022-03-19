@@ -1,86 +1,158 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-/* A linked list node */
-struct Node {
-int data;
-struct Node* next;
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct node
+{
+    int data;
+    struct node * next;
 };
+typedef struct node * NODE;
 
+NODE getnode();
+NODE delete_front(NODE);
+NODE delete_end(NODE);
+NODE swap(NODE);
+NODE insert_front(NODE);
+void read(NODE);
+NODE insert_end(NODE);
+void display(NODE);
 
-void swap(int* a, int* b);
-
-
-void pairWiseSwap(struct Node* head)
+void main()
 {
-struct Node* temp = head;
-
-
-while (temp != NULL && temp->next != NULL) {
-
-swap(&temp->data, &temp->next->data);
-
-
-temp = temp->next->next;
+    NODE head=NULL;
+    int choice;
+    while(1)
+    {
+        printf("\n1.Insert front\n2.Insert end\n3.Delete front\n4.delete end\n5.display list\n6.Swap\n7.Exit\n");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1: head=insert_front(head);
+                    break;
+            case 2:head=insert_end(head);
+                    break;
+            case 3:head=delete_front(head);
+                    break;
+            case 4:head=delete_end(head);
+                    break;
+            case 5:printf("Display list\n");
+                   display(head);
+                   break;
+            case 6: head=swap(head);
+                    break;
+            case 7: exit(0);
+                    break;
+            default:printf("Invalid\n");
+        }
+    }
 }
-}
 
-
-
-void swap(int* a, int* b)
+NODE getnode()
 {
-int temp;
-temp = *a;
-*a = *b;
-*b = temp;
+    NODE newn;
+    newn=(NODE)malloc(sizeof(struct node));
+    if(newn==NULL)
+        printf("Memory allocation failed\n");
+    return newn;
 }
-
-
-void push(struct Node** head_ref, int new_data)
+void read(NODE newn)
 {
-
-struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-
-
-new_node->data = new_data;
-
-
-new_node->next = (*head_ref);
-
-
-(*head_ref) = new_node;
+    printf("Enter details\n");
+    scanf("%d",&newn->data);
+    newn->next=NULL;
 }
-
-
-void printList(struct Node* node)
+NODE insert_front(NODE head)
 {
-while (node != NULL) {
-printf("%d ", node->data);
-node = node->next;
+    NODE newn=getnode();
+    read(newn);
+    if(head==NULL)
+        return newn;
+    newn->next=head;
+    head=newn;
+    return head;
 }
-}
-
-
-int main()
+NODE insert_end(NODE head)
 {
-struct Node* head = NULL;
-
-
-;
-push(&head, 5);
-push(&head, 4);
-push(&head, 3);
-push(&head, 2);
-push(&head, 1);
-
-printf("Linked list before calling pairWiseSwap()\n");
-printList(head);
-
-pairWiseSwap(head);
-
-printf("\nLinked list after calling pairWiseSwap()\n");
-printList(head);
-
-return 0;
+    NODE newn=getnode();
+    if(newn==NULL)
+        return head;
+    read(newn);
+    if(head==NULL)
+        return newn;
+    else
+    {
+        NODE cur=head;
+        while(cur->next!=NULL)
+            cur=cur->next;
+        cur->next=newn;
+        return head;
+    }
 }
-
+NODE delete_front(NODE head)
+{
+    if(head==NULL)
+    {
+        printf("List is empty\n");
+        return head;
+    }
+    else
+    {
+        NODE cur=head;
+        head=head->next;
+        free(cur);
+        return head;
+    }
+}
+NODE delete_end(NODE head)
+{
+    if(head==NULL)
+    {
+        printf("list is empty\n");
+        return head;
+    }
+    else if(head->next==NULL)
+    {
+        free(head);
+        return NULL;
+    }
+    else
+    {
+        NODE prev=NULL;
+        NODE cur=head;
+        while(cur->next!=NULL)
+        {
+            prev=cur;
+            cur=cur->next;
+        }
+        free(cur);
+        prev->next=NULL;
+        return head;
+    }
+}
+void display(NODE head)
+{
+    if(head==NULL)
+        printf("List is empty\n");
+    else
+    {
+        NODE cur=head;
+        while(cur!=NULL)
+        {
+            printf("%d-->",cur->data);
+            cur=cur->next;
+        }
+    }
+}
+NODE swap(NODE head)
+{
+    NODE cur=head;
+    NODE temp=NULL;
+    while(cur!=NULL && cur->next!=NULL)
+    {
+        temp= cur->data;
+        cur->data= cur->next->data;
+        cur->next->data= temp;
+        cur= cur->next->next;
+    }
+    return head;
+}
